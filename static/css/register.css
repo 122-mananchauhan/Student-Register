@@ -1,0 +1,135 @@
+        :root {
+            --bg-deep: #050509;
+            --ui-panel: #ffffff;
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --primary-3d: #43cea2; /* Teal matching 3D shape */
+            --secondary-3d: #185a9d; /* Blue matching 3D light */
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden; /* Important: prevents scrollbars during 3D scene */
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-deep);
+        }
+
+        /* --- 3D Background Canvas --- */
+        #three-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Sits behind the UI */
+        }
+
+        /* --- UI Overlay --- */
+        .ui-wrapper {
+            position: relative;
+            z-index: 10; /* Ensures the form sits above the 3D */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            pointer-events: none; /* Allows mouse interaction with 3D behind it */
+        }
+
+        .register-box {
+            width: 100%;
+            max-width: 440px;
+            padding: 50px 40px;
+            border-radius: 24px;
+            background: var(--ui-panel);
+            color: var(--text-main);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            animation: formAppear 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+            pointer-events: auto; /* Re-enables interaction for the form itself */
+        }
+
+        h3 {
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            margin-bottom: 5px;
+            font-size: 1.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 35px;
+            display: block;
+        }
+
+        /* UI-Style Inputs */
+        .form-label {
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            background-color: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            color: var(--text-main);
+            border-radius: 12px;
+            padding: 12px 15px;
+            transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+            background-color: #ffffff;
+            border-color: var(--secondary-3d);
+            box-shadow: 0 0 0 4px rgba(24, 90, 157, 0.15);
+        }
+
+        /* Interactive Password Toggle */
+        .password-wrapper {
+            position: relative;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--text-muted);
+            z-index: 10;
+        }
+
+        /* Neo-Brutalist Button */
+        .btn-register {
+            background: linear-gradient(135deg, var(--primary-3d) 0%, var(--secondary-3d) 100%);
+            border: none;
+            padding: 16px;
+            border-radius: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: white;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-top: 15px;
+        }
+
+        .btn-register:hover {
+            transform: scale(1.03) translateY(-3px);
+            box-shadow: 0 15px 30px rgba(67, 206, 162, 0.4);
+        }
+
+        .login-link {
+            color: var(--secondary-3d);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        @keyframes formAppear {
+            from { opacity: 0; transform: translateY(50px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }

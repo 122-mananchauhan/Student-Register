@@ -1,0 +1,90 @@
+
+        /* Background */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Glass Card */
+        .login-box {
+            width: 100%;
+            max-width: 380px;
+            padding: 40px;
+            border-radius: 20px;
+
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            color: white;
+
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Title */
+        .login-box h3 {
+            text-align: center;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        /* Inputs */
+        .form-control {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            border-radius: 10px;
+        }
+
+        .form-control::placeholder {
+            color: #ddd;
+        }
+
+        .form-control:focus {
+            background: rgba(255,255,255,0.3);
+            box-shadow: none;
+            border: none;
+            color: white;
+        }
+
+        /* Labels */
+        .form-label {
+            color: #eee;
+        }
+
+        /* Checkbox */
+        .form-check-label {
+            color: #ddd;
+        }
+
+        /* Button */
+        .btn-primary {
+            background: linear-gradient(45deg, #ff7eb3, #ff758c);
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            background: linear-gradient(45deg, #ff758c, #ff7eb3);
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }

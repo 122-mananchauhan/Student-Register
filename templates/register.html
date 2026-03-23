@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Interactive 3D UI</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syncopate:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+
+</head>
+<body>
+
+<div id="three-container"></div>
+
+<div class="ui-wrapper">
+    <div class="register-box">
+        <div class="text-center">
+            <h3>Register</h3>
+            <span class="subtitle">Access the platform</span>
+        </div>
+
+        <form id="registerForm" method="POST">
+            <div class="mb-3">
+                <label for="userInput" class="form-label">Username</label>
+                <input type="text" class="form-control" id="userInput" placeholder="johndoe_dev" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="emailInput" class="form-label">Email Address</label>
+                <input type="email" class="form-control" id="emailInput" placeholder="name@company.com" required>
+            </div>
+
+            <div class="mb-4">
+                <label for="passInput" class="form-label">Create Password</label>
+                <div class="password-wrapper">
+                    <input type="password" class="form-control" id="passInput" required>
+                    <i class="bi bi-eye toggle-password" id="eyeIcon"></i>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-register w-100">Initialize Account</button>
+        </form>
+
+        <p class="text-center mt-4 mb-0" style="font-size: 0.9rem; color: #6b7280;">
+            Already verified? <a href="/login" class="login-link">Sign In</a>
+        </p>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+    /* * --- 3D Background Scene (Three.js) ---
+     */
+    let scene, camera, renderer, object, lights = [];
+
+    init3D();
+    animate3D();
+
+    function init3D() {
+        const container = document.getElementById('three-container');
+        
+        // 1. Scene & Camera Setup
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 30; // Move camera back to see the object
+
+        // 2. The 3D Object (Icosahedron - a cool geometric sphere)
+        const geometry = new THREE.IcosahedronGeometry(12, 1);
+        
+        // Material that reacts to light (teal)
+        const material = new THREE.MeshPhongMaterial({
+            color: 0x43cea2, 
+            wireframe: true, // Shows the underlying structure
+            shininess: 100,
+            emissive: 0x111111
+        });
+        
+        object = new THREE.Mesh(geometry, material);
+        scene.add(object);
+
+        // 3. Dynamic Lighting (Moving blue light)
+        lights[0] = new THREE.PointLight(0xffffff, 1, 0); // Static white
+        lights[1] = new THREE.PointLight(0x185a9d, 1, 0); // Blue accents
+        lights[2] = new THREE.PointLight(0x43cea2, 1, 0); // Teal glow
+
+        lights[0].position.set(0, 200, 0);
+        lights[1].position.set(100, 200, 100);
+        lights[2].position.set(-100, -200, -100);
+
+        scene.add(lights[0]);
+        scene.add(lights[1]);
+        scene.add(lights[2]);
+
+        // 4. Renderer Setup
+        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        container.appendChild(renderer.domElement);
+
+        // 5. Handle Window Resize
+        window.addEventListener('resize', onWindowResize, false);
+    }
+
+    function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    // 6. Animation Loop
+    function animate3D() {
+        requestAnimationFrame(animate3D);
+
+        // Auto-rotation of the geometric shape
+        object.rotation.x += 0.002;
+        object.rotation.y += 0.003;
+
+        renderer.render(scene, camera);
+    }
+
+    /* * --- Interactive UI Scripting ---
+     */
+    // Toggle Password Visibility
+    const togglePassword = document.querySelector('#eyeIcon');
+    const password = document.querySelector('#passInput');
+
+    togglePassword.addEventListener('click', function() {
+        const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+        password.setAttribute('type', type);
+        this.classList.toggle('bi-eye');
+        this.classList.toggle('bi-eye-slash');
+    });
+
+    // Form Submission UI Feedback
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        const btn = this.querySelector('button');
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Initializing...';
+        btn.style.pointerEvents = 'none';
+        btn.style.opacity = '0.7';
+        // The form would POST after this visual change.
+    });
+</script>
+
+</body>
+</html>
