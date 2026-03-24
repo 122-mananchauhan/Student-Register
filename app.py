@@ -35,8 +35,8 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-        user = users.get(email)
-        if user and user['password'] == password:
+        # user = users.get(email)
+        if email in users and users[email]['password'] == password:
             session['user'] = email  
             return redirect(url_for('dashboard'))
         else:
