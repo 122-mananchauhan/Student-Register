@@ -1,13 +1,17 @@
+import sqlite3
 from flask import Flask, render_template, request, redirect, url_for ,session,flash
 
 app = Flask(__name__)
 
-# Store users properly
-users = {"mananchauhan@gmail.com": {'username': 'manan' , 'password': '1234'}
-         , "yash@gmail.com": {'username': 'yash', 'password': 'yash'}}   # format: {email: {username, password}}
 
 #super secret key for session management (not used in this example but good practice)
 app.secret_key = 'supersecretkey'
+
+def get_db_connection():
+    conn = sqlite3.connect('users.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
 
 @app.route('/')
 def home():
@@ -19,12 +23,21 @@ def register():
         email = request.form.get('email')
         username = request.form.get('username')
         password = request.form.get('password')
+        conn = get_db_connection()
+        cursor = conn.cursor()
 
-        if email in users:
+        cursor.execute('SELECT * FROM users WHERE email = ?', (email,))
+        user = cursor.fetchone()
+
+        if user:
+            conn.close()
             flash('Email already registered. Please log in.', 'error')
             return "Email already registered. Please log in."
         
-        users[email] = {'username': username, 'password': password}
+        cursor.execute('INSERT INTO users (email, username, password) VALUES (?, ?, ?)', (email, username, password))
+        conn.commit()
+        conn.close()
+
         flash('Registration successful! Please log in.', 'success')
         return redirect(url_for('login'))
 
@@ -36,13 +49,17 @@ def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
-        # user = users.get(email)
-        if email in users and users[email]['password'] == password:
-            session['user'] = email  
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM users WHERE email = ? AND password=?', (email, password))
+        user = cursor.fetchone()
+        conn.close()
+
+        if user:
+            session['user'] = email
             return redirect(url_for('dashboard'))
-            
         else:
-            flash('Invalid email or password. Please try again.')
             return '''Invalid email or password. Please try again.
             <a href="/register">Go back to register </a>'''
     
@@ -51,11 +68,14 @@ def login():
 
 @app.route('/dashboard')
 def dashboard():
-    if 'user' not in session:
-        return redirect(url_for('login'))
     email = session['user']
-    
-    return render_template('dashboard.html',user=users[email]['username'])
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM users WHERE email = ?', (email,))
+    user = cursor.fetchone()
+    conn.close()
+    return render_template('dashboard.html', username=user['username'])
 
 
 @app.route('/logout')
