@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for ,session
+from flask import Flask, render_template, request, redirect, url_for ,session,flash
 
 app = Flask(__name__)
 
@@ -21,10 +21,11 @@ def register():
         password = request.form.get('password')
 
         if email in users:
+            flash('Email already registered. Please log in.', 'error')
             return "Email already registered. Please log in."
         
         users[email] = {'username': username, 'password': password}
-        
+        flash('Registration successful! Please log in.', 'success')
         return redirect(url_for('login'))
 
     return render_template('register.html')
@@ -39,7 +40,9 @@ def login():
         if email in users and users[email]['password'] == password:
             session['user'] = email  
             return redirect(url_for('dashboard'))
+            
         else:
+            flash('Invalid email or password. Please try again.')
             return '''Invalid email or password. Please try again.
             <a href="/register">Go back to register </a>'''
     

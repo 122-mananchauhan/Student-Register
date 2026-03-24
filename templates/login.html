@@ -1,20 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+{% extends 'base.html' %}
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+{% block title %}
+Student Register | Login
+{% endblock %}
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
-   
-</head>
+{% block content %}
 
-<body>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 
 <div class="login-box">
     <h3>Login</h3>
@@ -36,10 +35,9 @@
             <label class="form-check-label">Remember me</label>
         </div>
 
-        <button type="submit" class="btn btn-primary w-100">Sign on</button>
+        <button type="submit" class="btn btn-primary w-100">Sign in</button>
 
     </form>
 </div>
 
-</body>
-</html>
+{% endblock %}
