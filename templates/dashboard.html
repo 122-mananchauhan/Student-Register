@@ -14,7 +14,19 @@
 
     <!-- Header -->
     <div class="header">
-        <h1>Welcome, {{user}}👋</h1>
+        <h1>Welcome, {{username}}👋</h1>
+
+        <!-- Profile Section -->
+        <div class="profile-section">
+            <img src="{{ url_for('static', filename='uploads/' + pfp) }}" 
+                 alt="Profile Picture" class="profile-pic">
+
+            <form action="/upload_pfp" method="POST" enctype="multipart/form-data">
+                <input type="file" name="pfp" accept="image/*">
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+
         <a href="/logout" class="logout-btn">Logout</a>
     </div>
 

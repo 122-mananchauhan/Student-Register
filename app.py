@@ -1,3 +1,4 @@
+import os
 import sqlite3
 from flask import Flask, render_template, request, redirect, url_for ,session,flash
 
@@ -75,7 +76,13 @@ def dashboard():
     cursor.execute('SELECT * FROM users WHERE email = ?', (email,))
     user = cursor.fetchone()
     conn.close()
-    return render_template('dashboard.html', username=user['username'])
+
+    # get profile picture from session (default if not uploaded)
+    pfp = session.get('pfp', 'default.png')
+
+    return render_template('dashboard.html',
+                           username=user['username'],
+                           pfp=pfp)
 
 
 @app.route('/logout')
@@ -83,5 +90,19 @@ def logout():
     session.pop('user', None)   
     return redirect(url_for('login'))
 
+@app.route('/upload_pfp', methods=['POST'])
+def upload_pfp():
+    file = request.files.get('pfp')
+
+    if file and file.filename != "":
+        filename = secure_filename(file.filename)
+        file.save(os.path.join('static/uploads', filename))
+
+        # Save filename (session or DB)
+        session['pfp'] = filename
+
+    return redirect('/dashboard')
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,port = 8000)
