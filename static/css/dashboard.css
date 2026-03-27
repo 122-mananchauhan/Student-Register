@@ -144,3 +144,41 @@ body {
         font-size: 1.75rem;
     }
 }
+
+/* Header layout */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Profile section */
+.profile-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Profile image */
+.profile-pic {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #6c63ff;
+}
+
+/* Upload button */
+.upload-btn {
+    background: linear-gradient(45deg, #6c63ff, #9f7aea);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: 0.3s;
+}
+
+.upload-btn:hover {
+    opacity: 0.8;
+}
