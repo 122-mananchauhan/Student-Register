@@ -69,6 +69,9 @@ def login():
 
 @app.route('/dashboard')
 def dashboard():
+    if 'user' not in session:
+        return redirect(url_for('login'))
+
     email = session['user']
 
     conn = get_db_connection()
@@ -77,7 +80,6 @@ def dashboard():
     user = cursor.fetchone()
     conn.close()
 
-    # get profile picture from session (default if not uploaded)
     pfp = session.get('pfp', 'default.png')
 
     return render_template('dashboard.html',
