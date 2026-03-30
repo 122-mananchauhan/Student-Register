@@ -14,17 +14,25 @@
 
     <!-- Header -->
     <div class="header">
-        <h1>Welcome, {{username}}👋</h1>
+        <h1>Welcome, {{ username }} </h1>
 
         <!-- Profile Section -->
         <div class="profile-section">
-            <img src="{{ url_for('static', filename='uploads/' + pfp) }}" 
-                 alt="Profile Picture" class="profile-pic">
 
+            <!-- ✅ FIXED IMAGE DISPLAY -->
+            <img 
+                src="{{ url_for('static', filename='uploads/' + pfp) if pfp else url_for('static', filename='uploads/default.png') }}"
+                alt="Profile Picture"
+                class="profile-pic"
+                onerror="this.onerror=null; this.src='{{ url_for('static', filename='uploads/default.png') }}';"
+            >
+
+            <!-- Upload Form -->
             <form action="/upload_pfp" method="POST" enctype="multipart/form-data">
-                <input type="file" name="pfp" accept="image/*">
+                <input type="file" name="pfp" accept="image/*" required>
                 <button type="submit">Upload</button>
             </form>
+
         </div>
 
         <a href="/logout" class="logout-btn">Logout</a>
